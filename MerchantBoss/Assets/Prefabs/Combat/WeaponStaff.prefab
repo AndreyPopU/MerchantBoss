@@ -168,6 +168,8 @@ MonoBehaviour:
   alternateTop: 0
   recoverAngle: 0
   smoothness: 8
+  swing1: {fileID: 0}
+  swing2: {fileID: 0}
   arrowPrefab: {fileID: 2096091942381514780, guid: 64bfda8d977a74f4d8d48c780a65d9c7,
     type: 3}
   shootPoint: {fileID: 7871974961119862187}

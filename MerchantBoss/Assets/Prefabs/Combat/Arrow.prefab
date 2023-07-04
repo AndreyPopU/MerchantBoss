@@ -4813,8 +4813,13 @@ MonoBehaviour:
   speed: 20
   homingTime: 0
   pooled: 1
+  arrow: 0
   homing: 0
+  target: {fileID: 0}
+  coreCollider: {fileID: 0}
   direction: {x: 0, y: 0}
+  trailEffect: {fileID: 0}
+  splashEffect: {fileID: 0}
 --- !u!50 &2096091942381514771
 Rigidbody2D:
   serializedVersion: 4
@@ -4937,7 +4942,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2.5, y: 2}
+  m_Size: {x: 0.2, y: 0.16}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

@@ -106,7 +106,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.16, y: 0.24}
+  m_Size: {x: 0.6666667, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -171,6 +171,8 @@ MonoBehaviour:
   alternateTop: 0
   recoverAngle: 0
   smoothness: 12
+  swing1: {fileID: 0}
+  swing2: {fileID: 0}
   arrowPrefab: {fileID: 2096091942381514780, guid: 64bfda8d977a74f4d8d48c780a65d9c7,
     type: 3}
   shootPoint: {fileID: 1152418407735679155}
@@ -184,6 +186,7 @@ MonoBehaviour:
   GFX: {fileID: 0}
   targetAngle: 0
   pivotPoint: {fileID: 0}
+  holstered: 0
 --- !u!95 &1152418408765805419
 Animator:
   serializedVersion: 3
@@ -374,7 +377,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.16, y: 0.24}
+  m_Size: {x: 0.2, y: 0.16}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
