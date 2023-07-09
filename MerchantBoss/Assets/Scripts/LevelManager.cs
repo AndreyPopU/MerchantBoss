@@ -24,7 +24,7 @@ public class LevelManager : MonoBehaviour
         entities.Remove(entity);
         if (entities.Count <= 0)
         {
-            if (currentRoom.waves > 0) currentRoom.StartCoroutine(currentRoom.Spawn(1));
+            if (!currentRoom.bossRoom && currentRoom.waves > 0) currentRoom.Spawn(1);
             else
             {
                 currentRoom.thankYouText.SetActive(true);

@@ -44,7 +44,7 @@ public class Entity : MonoBehaviour
     public AudioClip critEffect;
     public Transform pivotPoint;
 
-    protected Rigidbody2D rb;
+    public Rigidbody2D rb;
     protected Animator animator;
     protected SpriteRenderer spriteRenderer;
     protected Shader shaderDefault;
@@ -54,7 +54,7 @@ public class Entity : MonoBehaviour
     protected bool blocking;
     protected float baseShieldCD;
     protected int maxHealth;
-    protected bool flipped;
+    public bool flipped;
 
     public void Start()
     {

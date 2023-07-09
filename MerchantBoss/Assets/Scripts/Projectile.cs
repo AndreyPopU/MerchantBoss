@@ -60,7 +60,7 @@ public class Projectile : MonoBehaviour
         }
         else
         {
-            if (parentWeapon.wielder != null)
+            if (parentWeapon != null && parentWeapon.wielder != null)
             {
                 Physics2D.IgnoreCollision(coreCollider, parentWeapon.wielder.coreCollider);
                 Physics2D.IgnoreCollision(coreCollider, parentWeapon.wielder.triggerCollider);
@@ -95,11 +95,12 @@ public class Projectile : MonoBehaviour
 
                 DamageTaken damageTaken = new DamageTaken((parentWeapon.damage + parentWeapon.wielder.damage) * critMultiplier, 5, entity.transform.position - parentWeapon.wielder.transform.position, critMultiplier);
                 if (entity is Player) entity.GetComponent<Player>().TakeDamage(damageTaken);
+                else if (entity is BossNecromancer && parentWeapon.wielder == Player.instance) entity.GetComponent<BossNecromancer>().TakeDamage(damageTaken);
                 else if (entity is EnemyKnight) entity.GetComponent<EnemyKnight>().TakeDamage(damageTaken);
                 else if (entity is EnemyArcher) entity.GetComponent<EnemyArcher>().TakeDamage(damageTaken);
                 else if (entity is EnemyMage) entity.GetComponent<EnemyMage>().TakeDamage(damageTaken);
                 else if (entity is TargetDummy) entity.GetComponent<TargetDummy>().TakeDamage(damageTaken);
-                else entity.TakeDamage(damageTaken);
+                //else entity.TakeDamage(damageTaken);
 
                 if (entity.TryGetComponent(out Enemy enemy)) enemy.aggroRange = 15;
 

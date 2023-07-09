@@ -11,8 +11,14 @@ public class GameManager : MonoBehaviour
     [Header("Temporary")]
     public ClassCard[] classCards;
 
+    [Header("Boss UI")]
+    public Transform bossUI;
+    public Image bossIcon;
+    public MySlider bossHealthSlider;
+    public Text bossHealthText;
+
     [Header("Player name UI")]
-    public GameObject playerUI;
+    public Transform playerUI;
     public string playerName;
     public GameObject verifyText;
     public Text nameText;
@@ -121,17 +127,17 @@ public class GameManager : MonoBehaviour
         nameScreen.transform.localPosition = Vector3.zero;
     }
 
-    public void PlayerUIPrompt(bool show) => StartCoroutine(PlayerUIPromptCO(show));
+    public void PlayerUIPrompt(bool show) => StartCoroutine(HealthbarCO(show, playerUI));
 
-    IEnumerator PlayerUIPromptCO(bool show)
+    IEnumerator HealthbarCO(bool show, Transform ui)
     {
         YieldInstruction waitForFixedUpdate = new WaitForFixedUpdate();
 
         if (show)
         {
-            while (playerUI.transform.localPosition.y < 0)
+            while (ui.localPosition.y < 0)
             {
-                playerUI.transform.position += Vector3.up * 20;
+                ui.position += Vector3.up * 20;
                 yield return waitForFixedUpdate;
             }
 
@@ -139,9 +145,9 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            while (playerUI.transform.localPosition.y > -400)
+            while (ui.localPosition.y > -400)
             {
-                playerUI.transform.position -= Vector3.up * 20;
+                ui.position -= Vector3.up * 20;
                 yield return waitForFixedUpdate;
             }
         }
@@ -161,9 +167,15 @@ public class GameManager : MonoBehaviour
 
     public void ShowPlayerUI()
     {
-        playerUI.SetActive(true);
-        StartCoroutine(PlayerUIPromptCO(true));
+        playerUI.gameObject.SetActive(true);
+        StartCoroutine(HealthbarCO(true, bossUI));
         Player.instance.canMove = true;
+    }
+
+    public void ShowBossUI()
+    {
+        bossUI.gameObject.SetActive(true);
+        StartCoroutine(HealthbarCO(true, bossUI));
     }
 
     private void HideVerification() => verifyText.SetActive(false); // Invoked

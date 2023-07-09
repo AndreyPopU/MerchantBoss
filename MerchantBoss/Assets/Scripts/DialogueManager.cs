@@ -124,7 +124,7 @@ public class DialogueManager : MonoBehaviour
             int index = int.Parse(phrases[0].ToCharArray()[0].ToString());
             icon.sprite = icons[index];
             nameText.text = names[index];
-            if (GameManager.instance.playerUI.activeInHierarchy) GameManager.instance.PlayerUIPrompt(false);
+            if (GameManager.instance.playerUI.gameObject.activeInHierarchy) GameManager.instance.PlayerUIPrompt(false);
         }
         else
         {

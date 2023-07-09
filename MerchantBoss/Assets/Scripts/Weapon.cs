@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    public enum Type { Sword, Bow, Staff }
+    public enum Type { Sword, Bow, Staff, Scythe }
 
     public Type type;
 
@@ -34,13 +34,16 @@ public class Weapon : MonoBehaviour
     public float burstInterval;
     public float homingTime;
 
+    [Header("Scythe")]
+    public bool windingUp;
+    public bool spinning;
+
     [Header("Weapon positions")]
     public Vector2 handPlacement;
     public Vector2 holdOffset;
     public Vector2 backOffset;
     public float holsterRotation;
 
-    [HideInInspector]
     public SpriteRenderer GFX;
     [HideInInspector]
     public float targetAngle;
@@ -58,7 +61,6 @@ public class Weapon : MonoBehaviour
     {
         cam = Camera.main;
         coreCollider = GetComponent<BoxCollider2D>();
-        GFX = GetComponentInChildren<SpriteRenderer>();
         slashEffect = transform.GetComponentInChildren<ParticleSystem>();
         animator = GetComponent<Animator>();
         shootCD = wielder.attackSpeed;
@@ -67,7 +69,7 @@ public class Weapon : MonoBehaviour
         if (type != Type.Sword)
         {
             reloadSpeed = 1 / shootCD;
-            animator.SetFloat("reloadSpeed", reloadSpeed);
+            if (animator) animator.SetFloat("reloadSpeed", reloadSpeed);
         }
     }
 
@@ -96,8 +98,74 @@ public class Weapon : MonoBehaviour
         }
         else if (type == Type.Bow) 
             pivotPoint.rotation = Quaternion.Lerp(pivotPoint.rotation, Quaternion.Euler(new Vector3(0f, 0f, targetAngle)), (smoothness + (wielder.attackSpeed * attackSpeed)) * Time.fixedDeltaTime);
+        else if (type == Type.Scythe && !windingUp && !spinning)
+        {
+            if (recoverAngle > 30) recoverAngle -= 2.5f * (wielder.attackSpeed * attackSpeed);
+
+            // Handle rotation
+            if (wielder.flipped)
+            {
+                desiredRotation = new Vector3(0f, 0f, targetAngle - recoverAngle);
+            }
+            else
+            {
+                desiredRotation = new Vector3(0f, 0f, targetAngle + recoverAngle);
+            }
+
+            pivotPoint.rotation = Quaternion.Lerp(pivotPoint.rotation, Quaternion.Euler(desiredRotation), (smoothness + (wielder.attackSpeed * attackSpeed)) * Time.fixedDeltaTime);
+        }
 
         if (type != Type.Sword && shootCD > 0) shootCD -= Time.fixedDeltaTime;
+    }
+
+    IEnumerator WindUp()
+    {
+        YieldInstruction waitForFixedUpdate = new WaitForFixedUpdate();
+
+        windingUp = true;
+        wielder.rb.velocity = Vector2.zero;
+
+        if (wielder.flipped)
+        {
+            recoverAngle = -30;
+            // Fast wind up
+            while (recoverAngle > -55)
+            {
+                recoverAngle -= 2.5f;
+                pivotPoint.rotation = Quaternion.Lerp(pivotPoint.rotation, Quaternion.Euler(0, 0, recoverAngle), (smoothness + (wielder.attackSpeed * attackSpeed)) * Time.fixedDeltaTime);
+                yield return waitForFixedUpdate;
+            }
+
+            // Slow and dramatic wind up
+            while (recoverAngle > -65)
+            {
+                recoverAngle -= .4f;
+                pivotPoint.rotation = Quaternion.Lerp(pivotPoint.rotation, Quaternion.Euler(0, 0, recoverAngle), (smoothness + (wielder.attackSpeed * attackSpeed)) * Time.fixedDeltaTime);
+                yield return waitForFixedUpdate;
+            }
+        }
+        else
+        {
+            // Fast wind up
+            while (recoverAngle < 55)
+            {
+                recoverAngle += 2.5f;
+                pivotPoint.rotation = Quaternion.Lerp(pivotPoint.rotation, Quaternion.Euler(0, 0, recoverAngle), (smoothness + (wielder.attackSpeed * attackSpeed)) * Time.fixedDeltaTime);
+                yield return waitForFixedUpdate;
+            }
+
+            // Slow and dramatic wind up
+            while (recoverAngle < 65)
+            {
+                recoverAngle += .4f;
+                pivotPoint.rotation = Quaternion.Lerp(pivotPoint.rotation, Quaternion.Euler(0, 0, recoverAngle), (smoothness + (wielder.attackSpeed * attackSpeed)) * Time.fixedDeltaTime);
+                yield return waitForFixedUpdate;
+            }
+        }
+
+        windingUp = false;
+
+        Slash();
     }
 
     public void Attack()
@@ -112,6 +180,7 @@ public class Weapon : MonoBehaviour
             shootCD = wielder.attackSpeed;
         }
         else if (type == Type.Staff) StartCoroutine(ShootMagic());
+        else if (type == Type.Scythe) StartCoroutine(WindUp());
 
         Qattack = false;
     }
@@ -120,15 +189,25 @@ public class Weapon : MonoBehaviour
     {
         if (recoverAngle < 45) Qattack = true;
         if (wielder == Player.instance && (Mathf.Abs(checkAngle) > 5 && Mathf.Abs(checkAngle) < 355)) return;
-        if (recoverAngle > 31) return;
+
+        // If sword hasn't returned in start position and therefore isn't ready for a swing
+        if (recoverAngle > 31 && type == Type.Sword) return;
 
         slashEffect.Play();
         alternateTop = !alternateTop;
         audioSource.clip = alternateTop ? swing1 : swing2;
         audioSource.Play();
-        recoverAngle = 135;
+        if (type == Type.Sword)
+        {
+            recoverAngle = 135;
+            Invoke("DisableTrail", .2f);
+        }
+        else if (type == Type.Scythe)
+        {
+            recoverAngle = 330;
+            Invoke("DisableTrail", .6f);
+        }
         isAttacking = true;
-        Invoke("DisableTrail", .2f);
     }
 
     public void ShootArrow() // Animator event!!!!!!
@@ -260,14 +339,15 @@ public class Weapon : MonoBehaviour
                 DamageTaken damageTaken = new DamageTaken((damage + wielder.damage) * critMultiplier, 5, entity.transform.position - wielder.transform.position, critMultiplier);
 
                 if (entity is Player) entity.GetComponent<Player>().TakeDamage(damageTaken);
+                else if (entity is BossNecromancer && wielder == Player.instance) entity.GetComponent<BossNecromancer>().TakeDamage(damageTaken);
                 else if (entity is EnemyKnight) entity.GetComponent<EnemyKnight>().TakeDamage(damageTaken);
                 else if (entity is EnemyArcher) entity.GetComponent<EnemyArcher>().TakeDamage(damageTaken);
                 else if (entity is EnemyMage) entity.GetComponent<EnemyMage>().TakeDamage(damageTaken);
                 else if (entity is TargetDummy) entity.GetComponent<TargetDummy>().TakeDamage(damageTaken);
-                else entity.TakeDamage(damageTaken);
+                //else entity.TakeDamage(damageTaken);
 
                 entity.swordInvincible = true;
-                entity.TakeDamage(damageTaken);
+                //entity.TakeDamage(damageTaken);
             }
         }
         else if (collision.TryGetComponent(out TreasureChest chest)) chest.Open();

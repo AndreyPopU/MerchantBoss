@@ -5475,16 +5475,18 @@ MonoBehaviour:
   hitEffect: {fileID: 8300000, guid: e0105204ba8caff439271087b3779e45, type: 3}
   critEffect: {fileID: 8300000, guid: ec76eed420615bb43a7949bec62fa0ea, type: 3}
   pivotPoint: {fileID: 8282789076731729094}
+  rb: {fileID: 0}
   swordInvincible: 0
+  flipped: 0
   shieldSlamClip: {fileID: 8300000, guid: 575a0999c70c4024690b5b64f268250b, type: 3}
   metalClangs:
   - {fileID: 8300000, guid: 4fb9b7a147112e44282647c0a59e68fa, type: 3}
   - {fileID: 8300000, guid: 54d17363fa3d5ac44ab56829c1837d1f, type: 3}
   - {fileID: 8300000, guid: 6c94f67c8419d164b844a328c23cb7e2, type: 3}
   dashClips:
-  - {fileID: 8300000, guid: b818e67200036ae438e413ea675fd3a3, type: 3}
-  - {fileID: 8300000, guid: b818e67200036ae438e413ea675fd3a3, type: 3}
-  - {fileID: 8300000, guid: b818e67200036ae438e413ea675fd3a3, type: 3}
+  - {fileID: 8300000, guid: 5e8e9d23936a36040a981b98d217528f, type: 3}
+  - {fileID: 8300000, guid: 5e8e9d23936a36040a981b98d217528f, type: 3}
+  - {fileID: 8300000, guid: 545a847c166b2a4448f9abe49b5e060d, type: 3}
   shield: {fileID: 0}
   blockCD: 3
   steelMat: {fileID: 2100000, guid: 2b8603469b801724fa0cd142aa91eff5, type: 2}
@@ -5500,7 +5502,7 @@ MonoBehaviour:
   dashing: 0
   warpMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8192
   warpEffect: {fileID: 8282789076427534243}
   smokeDashEffect: {fileID: 8282789076763139846}
 --- !u!50 &8282789075598333520

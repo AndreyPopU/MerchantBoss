@@ -4909,11 +4909,13 @@ MonoBehaviour:
   indicationArrow: {fileID: 0}
   burstInterval: 0
   homingTime: 0
+  windingUp: 0
+  spinning: 0
   handPlacement: {x: 0.45, y: 0}
   holdOffset: {x: 1, y: 0}
   backOffset: {x: -0.2, y: 0.15}
   holsterRotation: 180
-  GFX: {fileID: 0}
+  GFX: {fileID: 3858976531099971516}
   targetAngle: 0
   pivotPoint: {fileID: 0}
   holstered: 0

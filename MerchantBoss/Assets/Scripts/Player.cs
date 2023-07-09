@@ -34,7 +34,7 @@ public class Player : Entity
     private Camera cam;
     
     private float chargeTime = 1;
-    private Vector2 dashDirection;
+    private Vector3 dashDirection;
     private float baseDashCD;
     private bool invincible;
 
@@ -130,6 +130,12 @@ public class Player : Entity
         int direction = flip ? 1 : 0;
 
         animator.SetFloat("direction", direction);
+
+        if (weapon != null && weapon.type == Weapon.Type.Staff && armed)
+        {
+            weapon.transform.localScale = Vector3.one;
+            weapon.GFX.transform.GetChild(0).localPosition = weapon.handPlacement * (flipped ? 1 : -1);
+        }
 
         if (armed)
         {
@@ -330,22 +336,18 @@ public class Player : Entity
             warpEffect.Play();
 
             // Raycast
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, rawDashDirection, 3, warpMask);
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, dashDirection, dashRange, warpMask);
 
             // Warp
             if (hit)
             {
-                if (hit.collider.gameObject.tag == "Border")
-                {
-                    Vector3 offset = ((Vector3)hit.point - transform.position).normalized;
-                    transform.position = (Vector3)hit.point - offset * .35f;
-                }
-                else transform.position += (Vector3)dashDirection;
+                if (hit.collider.gameObject.tag == "Border" || hit.collider.gameObject.layer == 13)
+                    transform.position = hit.point;
             }
-            else transform.position += (Vector3)dashDirection;
+            else transform.position += dashDirection;
 
-            dashing = false;
             flipPass = true;
+            dashing = false;
         }
     }
 

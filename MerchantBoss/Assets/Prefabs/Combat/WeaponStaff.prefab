@@ -176,11 +176,13 @@ MonoBehaviour:
   indicationArrow: {fileID: 0}
   burstInterval: 0.2
   homingTime: 0.5
-  handPlacement: {x: 0.375, y: 0}
+  windingUp: 0
+  spinning: 0
+  handPlacement: {x: 0.15, y: 0}
   holdOffset: {x: 1, y: 0}
   backOffset: {x: -0.1, y: 0.25}
   holsterRotation: 0
-  GFX: {fileID: 0}
+  GFX: {fileID: 7871974961438983761}
   targetAngle: 0
   pivotPoint: {fileID: 0}
   holstered: 0

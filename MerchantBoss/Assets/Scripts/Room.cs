@@ -9,6 +9,7 @@ public class Room : MonoBehaviour
     public static Room instance;
 
     public int level;
+    public bool bossRoom;
     public DungeonEntrance dungeonEntrance;
     public DungeonEntrance exit;
     [Tooltip("How many waves will be in this room")]
@@ -39,11 +40,16 @@ public class Room : MonoBehaviour
     void Start()
     {
         LevelManager.instance.currentRoom = this;
-        StartCoroutine(Spawn(3)); // 3
+        if (!bossRoom) Spawn(3); // 3
         exit.Exit();
     }
 
-    public IEnumerator Spawn(int delay)
+    public void Spawn(int delay)
+    {
+        StartCoroutine(SpawnCO(delay));
+    }
+
+    public IEnumerator SpawnCO(int delay)
     {
         if (delay > 0) yield return new WaitForSeconds(delay);
 
@@ -75,10 +81,16 @@ public class Room : MonoBehaviour
         {
             // Then spawn enemies
             Enemy enemy = Instantiate(enemiesToSpawn[spawnIndex], spawnPositions[positionIndex].position, Quaternion.identity).GetComponent<Enemy>();
-            //enemy.Spawn();
+            enemy.necromancerSummoned = bossRoom ? true : false;
             LevelManager.instance.entities.Add(enemy);
             spawnIndex++;
             positionIndex++;
+
+            if (spawnIndex >= enemiesToSpawn.Length)
+            {
+                nextBatch -= spawnIndex;
+                spawnIndex = 0;
+            }
 
             if (positionIndex >= spawnPositions.Length) positionIndex = 0;
 
@@ -86,6 +98,5 @@ public class Room : MonoBehaviour
         }
 
         waves--;
-        if (waves == 2) batch++;
     }
 }

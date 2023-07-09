@@ -21,6 +21,7 @@ public class Enemy : Entity
     protected Vector3 wanderPoint;
     protected Slider healthSlider;
     protected bool spawned;
+    public bool necromancerSummoned;
 
     protected new void Start()
     {
@@ -79,8 +80,11 @@ public class Enemy : Entity
         if (health <= 0)
         {
             LevelManager.instance.RemoveEntity(this);
-            DropLoot(3, 6);
-            XPManager.instance.AddXP(4);
+            if (!necromancerSummoned)
+            {
+                DropLoot(3, 6);
+                XPManager.instance.AddXP(4);
+            }
         }
     }
 

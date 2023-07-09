@@ -8,7 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/VillageScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/DungeonScene.unity
     guid: 924d76176480a9e4e86b2c556a383f5d
+  - enabled: 1
+    path: Assets/Scenes/BossScene.unity
+    guid: 7420316f28771774b92cf30b5d410d00
   m_configObjects: {}

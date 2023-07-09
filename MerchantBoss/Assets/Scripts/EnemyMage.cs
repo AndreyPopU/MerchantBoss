@@ -7,9 +7,11 @@ public class EnemyMage : Enemy
     public float teleportCD;
     public float teleportRange;
     public ParticleSystem warpEffect;
-
+    public LayerMask warpMask;
+    
+    protected Vector3 warpPosition;
     private Transform attackTarget;
-    private float baseTeleportCD;
+    protected float baseTeleportCD;
 
     private new void Start()
     {
@@ -20,8 +22,6 @@ public class EnemyMage : Enemy
     private void FixedUpdate()
     {
         if (knockbacked || !canMove || stunned) return;
-
-        if (teleportCD > 0) teleportCD -= Time.deltaTime;
 
         // Face target if there's one
         if (attackTarget != null)
@@ -73,8 +73,24 @@ public class EnemyMage : Enemy
         warpEffect.Play();
 
         // Warp in radius
-        transform.position = transform.position + (Vector3)(Vector3.one * (Random.insideUnitCircle.normalized * teleportRange));
+        warpPosition = transform.position + (Vector3)(Vector3.one * (Random.insideUnitCircle.normalized * teleportRange));
 
+        // Raycast
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, warpPosition - transform.position, teleportRange, warpMask);
+
+        // Warp
+        if (hit)
+        {
+            if (hit.collider.gameObject.tag == "Border" || hit.collider.gameObject.layer == 13)
+            {
+                Vector3 offset = ((Vector3)hit.point - transform.position).normalized;
+                transform.position = (Vector3)hit.point;
+            }
+            else transform.position = warpPosition;
+        }
+        else transform.position = warpPosition;
+
+        flipPass = true;
         teleportCD = baseTeleportCD;
     }
 

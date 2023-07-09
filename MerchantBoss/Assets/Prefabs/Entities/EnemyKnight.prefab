@@ -962,7 +962,9 @@ MonoBehaviour:
   hitEffect: {fileID: 8300000, guid: e0105204ba8caff439271087b3779e45, type: 3}
   critEffect: {fileID: 8300000, guid: ec76eed420615bb43a7949bec62fa0ea, type: 3}
   pivotPoint: {fileID: 3062059882519299428}
+  rb: {fileID: 0}
   swordInvincible: 0
+  flipped: 0
   possibleLoot:
   - {fileID: 5748975385062873559, guid: f419517ebaad43e419dbb559a870c06c, type: 3}
   - {fileID: 5748975385062873559, guid: 1cbacf47353e47a4380015778bea4530, type: 3}
@@ -6685,11 +6687,13 @@ MonoBehaviour:
   indicationArrow: {fileID: 0}
   burstInterval: 0
   homingTime: 0
+  windingUp: 0
+  spinning: 0
   handPlacement: {x: 0.45, y: 0}
   holdOffset: {x: 1, y: 0}
   backOffset: {x: -0.2, y: 0.15}
   holsterRotation: 180
-  GFX: {fileID: 0}
+  GFX: {fileID: 7742357672069631289}
   targetAngle: 0
   pivotPoint: {fileID: 3062059882519299428}
   holstered: 0
