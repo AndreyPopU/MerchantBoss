@@ -42,6 +42,8 @@ public class Enemy : Entity
         healthSlider = smartSlider.GetComponent<Slider>();
         smartSlider.UpdateValues(health, maxHealth);
         Spawn();
+
+        if (necromancerSummoned) aggroRange = 25;
     }
 
     protected void Wander()

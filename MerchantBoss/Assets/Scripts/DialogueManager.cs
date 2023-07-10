@@ -32,7 +32,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (chatBox.activeInHierarchy && chatBox.transform.position.y > 120)
         {
-            if (Input.GetButtonUp("Jump") || Input.GetMouseButtonUp(0))
+            if (Input.GetButtonUp("Jump") || Input.GetMouseButtonUp(0) || Input.GetKeyUp(KeyCode.KeypadEnter))
             {
                 if (writingText) 
                 { 

@@ -168,7 +168,7 @@ public class GameManager : MonoBehaviour
     public void ShowPlayerUI()
     {
         playerUI.gameObject.SetActive(true);
-        StartCoroutine(HealthbarCO(true, bossUI));
+        StartCoroutine(HealthbarCO(true, playerUI));
         Player.instance.canMove = true;
     }
 
